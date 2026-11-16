@@ -22,7 +22,7 @@ dev = [
     # попередженням про застарілість.
     "httpx2>=2.16",
     "ruff>=0.17",
-    "mypy>=2.4",
+    "mypy>=2.4.1",
 ]
 
 [tool.hatch.build.targets.wheel]
