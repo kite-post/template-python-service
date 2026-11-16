@@ -6,7 +6,7 @@
 ## Новий сервіс
 
 ```bash
-gh repo create kite-post/ai-service --private --template kite-post/template-python-service
+gh repo create kite-post/ai-service --public --template kite-post/template-python-service
 cd ai-service
 make rename NAME=ai-service
 git add -A && git commit -m "Перейменувати шаблон у ai-service" && git push
