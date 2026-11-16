@@ -1,6 +1,6 @@
 # template-python-service
 
-Шаблон репозиторію для Python-сервіса Kite: FastAPI, Python 3.12, ruff, mypy у
+Шаблон репозиторію для Python-сервіса Kite: FastAPI, Python 3.15, ruff, mypy у
 строгому режимі. Із нього створюються `ai-service` і `simulator` (5.6).
 
 ## Новий сервіс
