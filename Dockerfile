@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ── Збірка ────────────────────────────────────────────────────────────────────
-FROM python:3.12-slim AS build
+FROM python:3.15-slim AS build
 WORKDIR /build
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -15,7 +15,7 @@ RUN python -m venv /venv \
     && /venv/bin/pip install .
 
 # ── Запуск ────────────────────────────────────────────────────────────────────
-FROM python:3.12-slim AS runtime
+FROM python:3.15-slim AS runtime
 
 RUN groupadd -r kite && useradd -r -g kite kite \
     && apt-get update \
