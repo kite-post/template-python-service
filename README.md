@@ -46,6 +46,40 @@ make up         # підняти образ на 8080
 make run        # uvicorn з перезавантаженням
 ```
 
+## Контракти
+
+Pydantic-моделі REST і подій та реєстр топіків приходять пакетом
+`kite-contracts`, закріпленим за тегом — своїх копій `openapi.yaml` і JSON
+Schema сервіс не тримає (5.4, п. 6). У реєстр пакет не публікується: pip бере
+його з git за тегом, тож у `pyproject.toml` стоїть
+
+```toml
+"kite-contracts @ git+https://github.com/kite-post/kite-contracts.git@v0.2.1#subdirectory=python",
+```
+
+```bash
+make contracts            # поставити пакет за поточним тегом
+make contracts V=0.3.0    # перейти на нову версію: Makefile + pyproject.toml
+make contracts-check      # версія закріплена, копій схем немає, пакет імпортується
+```
+
+```python
+from kite_contracts import parse_event
+from kite_contracts.registry import EVENT_REGISTRY
+
+event = parse_event(raw)  # ShipmentStatusChangedEvent тощо
+topic = EVENT_REGISTRY[event.type].topic
+```
+
+Нова версія приходить сама: після релізу `kite-contracts` розсилає подію
+всім репозиторіям із топіком `kite-contracts`, і workflow `contracts-bump`
+відкриває PR з `make contracts V=<версія>`. Версія одна на всі репозиторії.
+Руками те саме: `make contracts V=0.3.0`. Якщо тегу немає, `Makefile` і
+маніфест лишаються як були.
+
+Через git-залежність у збірковому шарі образу стоїть `git`; в образ, що
+запускається, він не потрапляє.
+
 ## CI
 
 Увесь пайплайн — виклик спільного workflow з

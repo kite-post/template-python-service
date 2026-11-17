@@ -8,6 +8,12 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1
 
 # Залежності окремим шаром: pyproject змінюється рідше за код.
+# git потрібен лише тут: kite-contracts ставиться з git за тегом (5.6) і в
+# образ, що запускається, не потрапляє.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY pyproject.toml ./
 COPY src ./src
 RUN python -m venv /venv \

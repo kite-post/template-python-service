@@ -4,9 +4,14 @@ IMAGE   ?= ghcr.io/$(ORG)/$(SERVICE)
 TAG     ?= dev
 VENV    ?= .venv
 PY      := $(VENV)/bin/python
+# Тег kite-contracts, за яким закріплений сервіс. Той самий номер стоїть у
+# pyproject.toml; contracts-check стежить, щоб вони не розійшлися.
+CONTRACTS_VERSION ?= 0.2.1
+# Python для contracts: venv, якщо він є, інакше той, що в PATH (так у CI).
+PYTHON  := $(if $(wildcard $(PY)),$(PY),python3)
 
 .DEFAULT_GOAL := help
-.PHONY: help venv build lint fmt types test test-it verify image run up down clean contracts rename
+.PHONY: help venv build lint fmt types test test-it verify image run up down clean contracts contracts-check rename
 
 help: ## Показати цілі
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -55,13 +60,11 @@ clean: ## Прибрати кеші й артефакти
 	rm -rf .pytest_cache .mypy_cache .ruff_cache dist build test-results.xml
 	find . -name '__pycache__' -type d -prune -exec rm -rf {} +
 
-contracts: ## Згенерувати моделі подій з kite-contracts
-	@echo "kite-contracts ще не підключено до цього сервіса."
-	@echo "Підключення: пакет kite-contracts, закріплений за тегом (5.4, п. 6),"
-	@echo "далі розкоментуй ціль contracts-check нижче — CI почне її проганяти."
+contracts: ## Підключити kite-contracts за тегом; нова версія — make contracts V=0.2.0
+	@ORG=$(ORG) PYTHON=$(PYTHON) bash scripts/contracts.sh "$(if $(V),$(V),$(CONTRACTS_VERSION))"
 
-# contracts-check: ## Перевірити сумісність зі схемами kite-contracts
-# 	$(VENV)/bin/python -m kite_contracts.verify src
+contracts-check: ## Перевірити, що контракти підключені за тегом і копій схем немає
+	@PYTHON=$(PYTHON) bash scripts/contracts-check.sh "$(CONTRACTS_VERSION)"
 
 rename: ## Перейменувати шаблон: make rename NAME=ai-service
 	@test -n "$(NAME)" || (echo "Вкажи ім'я: make rename NAME=ai-service"; exit 1)
