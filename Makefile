@@ -6,7 +6,7 @@ VENV    ?= .venv
 PY      := $(VENV)/bin/python
 # Тег kite-contracts, за яким закріплений сервіс. Той самий номер стоїть у
 # pyproject.toml; contracts-check стежить, щоб вони не розійшлися.
-CONTRACTS_VERSION ?= 0.2.1
+CONTRACTS_VERSION ?= 0.3.0
 # Python для contracts: venv, якщо він є, інакше той, що в PATH (так у CI).
 PYTHON  := $(if $(wildcard $(PY)),$(PY),python3)
 
