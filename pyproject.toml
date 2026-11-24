@@ -9,7 +9,7 @@ description = "Шаблон Python-сервіса Kite"
 requires-python = ">=3.15"
 dependencies = [
     "kite-contracts @ git+https://github.com/kite-post/kite-contracts.git@v0.3.0#subdirectory=python",
-    "fastapi>=0.163.1",
+    "fastapi>=0.165.0",
     "uvicorn[standard]>=0.54.0",
     "pydantic>=2.14.3",
     "pydantic-settings>=2.16.3",
